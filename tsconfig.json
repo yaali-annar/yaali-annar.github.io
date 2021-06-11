@@ -1,0 +1,51 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": ".",
+        "jsx": "react",
+        "lib": [
+            "dom",
+            "es6",
+            "es2017"
+        ],
+        "module": "esnext",
+        "moduleResolution": "node",
+        "outDir": "./dist/",
+        "target": "es5",
+        "paths": {
+            "@components/*": [
+                "./src/components/*"
+            ],
+            "@constants/*": [
+                "./src/constants/*"
+            ],
+            "@contexts/*": [
+                "./src/contexts/*"
+            ],
+            "@hooks/*": [
+                "./src/hooks/*"
+            ],
+            "@routes/*": [
+                "./src/routes/*"
+            ],
+            "@internal-types/*": [
+                "./src/internal-types/*"
+            ],
+            "@utils/*": [
+                "./src/utils/*"
+            ],
+            "@styles/*": [
+                "./src/styles/*"
+            ]
+        }
+    },
+    "include": [
+        "src/**/*",
+        "../external/src/hooks/useAdaptiveSize.ts",
+        "../library/src/types/Registrant.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
