@@ -1,16 +1,15 @@
-const path = require("path");
-const { merge } = require("webpack-merge");
-const getRepositoryName = require("git-repo-name").sync;
+const path = require('path')
+const { merge } = require('webpack-merge')
 
-const common = require("./webpack.common.js");
-const { resolve } = require("./import.resolver.js");
+const common = require('./webpack.common.js')
+const { resolve } = require('./import.resolver.js')
 
 module.exports = merge(common, {
-  mode: "production",
+  mode: 'production',
   output: {
-    path: path.resolve(__dirname, "dist/"),
-    publicPath: `/${getRepositoryName()}/`,
-    filename: "[name].[contenthash].js",
+    path: path.resolve(__dirname, 'dist/'),
+    publicPath: `/`,
+    filename: '[name].[contenthash].js',
   },
   resolve,
-});
+})

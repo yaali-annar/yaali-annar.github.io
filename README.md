@@ -15,7 +15,7 @@ This repo uses [gh-pages](https://www.npmjs.com/package/gh-pages) which will pus
 
 ## Resolving bundle location
 
-Github pages for repo are linked to `https://${userName}.github.io/${repoName}` this means that we need to set the index.html to fetch the bundle.js from `/${repoName}/bundle.js`. You can do this by hardcoding the repository name or using a helper library like `git-repo-name`. Here is the output section of the webpack production config.   
+If you're not using username.github.io  as your repo name, github pages for repo are linked to `https://${userName}.github.io/${repoName}` this means that we need to set the index.html to fetch the bundle.js from `/${repoName}/bundle.js`. You can do this by hardcoding the repository name or using a helper library like `git-repo-name`. Here is the output section of the webpack production config.   
 
     output: {
        path: path.resolve(__dirname, "dist/"),
