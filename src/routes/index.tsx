@@ -3,10 +3,11 @@ import { HashRouter as Router, Switch, Route } from 'react-router-dom'
 
 import Pesto from './Pesto'
 import Home from './Home'
+import ColorManagement from './ColorManagement'
 
 import globalStyle from '@styles/globalStyle'
 
-const routes = [{ ...Pesto }, { ...Home }]
+const routes = [{ ...Pesto }, { ...ColorManagement }, { ...Home }]
 
 const App: FC<Record<string, never>> = () => (
   <Router basename="/">
