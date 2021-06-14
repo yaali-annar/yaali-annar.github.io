@@ -1,52 +1,41 @@
-import React, { FC, useState, ChangeEventHandler } from 'react'
-import { rybStyle } from './style'
+import React, { FC } from 'react'
+import { ColorProvider } from './context'
 
+import { rybStyle } from './style'
 import Wheel from './components/Wheel'
 import Square from './components/Square'
 import CursorHandler from './components/CursorHandler'
+import ColorTable from './components/ColorTable'
+import ColorsString from './components/ColorsString'
 
-const RYB: FC = () => {
-  const [hsv, setHsv] = useState([0, 360, 360])
-  const [h, s, v] = hsv
-
-  const updateHsv =
-    (index: number): ChangeEventHandler<HTMLInputElement> =>
-    (event) => {
-      let value = +event.target.value
-      if (value > 360) {
-        value = 360
-      }
-      if (value < 0) {
-        value = 0
-      }
-      const newHsv = [...hsv]
-      newHsv[index] = value
-      setHsv(newHsv)
-    }
-
-  return (
+const RYB: FC = () => (
+  <ColorProvider>
     <div className={rybStyle}>
-      <h1>RYB Wheel</h1>
-      <div className="flex items-start">
-        <div className="wrapper">
-          <Wheel {...{ hsv, setHsv }} />
-          <Square {...{ hsv, setHsv }} />
-          <CursorHandler {...{ hsv, setHsv }} />
-        </div>
+      <h1 className="mb32 text-center">Color Management</h1>
+      <div className="flex items-start justify-center">
         <div>
-          <p>
-            H: <input value={h} type="text" onChange={updateHsv(0)} />
-          </p>
-          <p>
-            S: <input value={s} type="text" onChange={updateHsv(1)} />
-          </p>
-          <p>
-            V: <input value={v} type="text" onChange={updateHsv(2)} />
+          <div className="wrapper">
+            <Wheel />
+            <Square />
+            <CursorHandler />
+          </div>
+          <p className="mt16">This color wheel uses RYB spectrum.</p>
+          <ul>
+            <li>Red at 0</li>
+            <li>Yellow at 120</li>
+            <li>Blue at 240</li>
+          </ul>
+        </div>
+        <div className="ml16">
+          <ColorsString />
+          <ColorTable />
+          <p className="mt16">
+            Both Saturation and Value ranges from 0 to 360.
           </p>
         </div>
       </div>
     </div>
-  )
-}
+  </ColorProvider>
+)
 
 export default RYB

@@ -4,7 +4,7 @@ import {
   WHEEL_INNER_RADIUS,
   WHEEL_OUTER_RADIUS,
 } from './data'
-import { setPixel } from '@utils/canvas'
+import { rybToRgb, setPixel } from '@routes/ColorManagement/utils'
 
 const getOffset = (coordinate: number[]): number[] => {
   const [x, y] = coordinate
@@ -22,44 +22,6 @@ const getAngle = (coordinate: number[]): number => {
   return (angleRad * 360) / Math.PI / 2
 }
 
-const hsvToRgb = ([intH, intS, intV]: number[]): number[] => {
-  let h = (intH % 360) / 360
-  const s = intS / 360
-  let v = intV / 360
-
-  let rgb = []
-
-  v *= 256
-
-  if (s == 0) {
-    rgb = [v, v, v]
-  }
-
-  h *= 6
-
-  const f = h - Math.floor(h)
-
-  const p = Math.floor(v * (1 - s))
-  const q = Math.floor(v * (1 - s * f))
-  const t = Math.floor(v * (1 - s * (1 - f)))
-
-  if (h < 1) {
-    rgb = [v, t, p]
-  } else if (h < 2) {
-    rgb = [q, v, p]
-  } else if (h < 3) {
-    rgb = [p, v, t]
-  } else if (h < 4) {
-    rgb = [p, q, v]
-  } else if (h < 5) {
-    rgb = [t, p, v]
-  } else {
-    rgb = [v, p, q]
-  }
-
-  return rgb
-}
-
 const getCursorPosition = (
   canvas: HTMLDivElement,
   event: MouseEvent,
@@ -68,16 +30,7 @@ const getCursorPosition = (
   return [event.clientX - rect.left, event.clientY - rect.top]
 }
 
-const rybToRgb = (x: number): number => {
-  x = ((x + 120) % 360) - 180
-  x /= 60
-  x = -Math.pow(x, 5) / 120 + (Math.pow(x, 3) * 5) / 24 + (x * 4) / 5
-  x *= 30
-  x = (x + 390) % 360
-  return x
-}
-
-const renderHueSlider = (
+const renderHuePointer = (
   slider: CanvasRenderingContext2D,
   hue: number,
 ): void => {
@@ -96,7 +49,7 @@ const renderHueSlider = (
   slider.stroke()
 }
 
-const renderSvSlider = (
+const renderSvPointer = (
   slider: CanvasRenderingContext2D,
   saturation: number,
   value: number,
@@ -108,6 +61,7 @@ const renderSvSlider = (
   const radius = 15
   slider.clearRect(0, 0, CANVAS_DIMENSION, CANVAS_DIMENSION)
   slider.lineWidth = 3
+  slider.strokeStyle = value < 180 ? 'white' : 'black'
   slider.beginPath()
   slider.arc(x, y, radius, 0, Math.PI * 2)
   slider.stroke()
@@ -128,13 +82,10 @@ const renderSquare = (
       const s = (x / squareSize) * 360
       const v = (y / squareSize) * 360
 
-      const rgb = hsvToRgb([h, s, v])
-      setPixel(
-        pixels,
-        CANVAS_DIMENSION,
-        [x + SQUARE_INSET, y + SQUARE_INSET],
-        rgb,
-      )
+      const coordinate = { x: x + SQUARE_INSET, y: y + SQUARE_INSET }
+      const color = { h, s, v }
+
+      setPixel(pixels, CANVAS_DIMENSION, coordinate, color)
     }
   }
 
@@ -155,10 +106,12 @@ const renderWheel = (wheel: CanvasRenderingContext2D): void => {
       }
 
       const angleDeg = getAngle([x, y])
-      const hue = rybToRgb(angleDeg)
-      const rgb = hsvToRgb([hue, 360, 360])
+      const h = rybToRgb(angleDeg)
 
-      setPixel(pixels, CANVAS_DIMENSION, [x, y], rgb)
+      const coordinate = { x, y }
+      const color = { h, s: 360, v: 360 }
+
+      setPixel(pixels, CANVAS_DIMENSION, coordinate, color)
     }
   }
 
@@ -170,10 +123,9 @@ export {
   getDistance,
   getAngle,
   getCursorPosition,
-  hsvToRgb,
   rybToRgb,
   renderWheel,
   renderSquare,
-  renderHueSlider,
-  renderSvSlider,
+  renderHuePointer,
+  renderSvPointer,
 }

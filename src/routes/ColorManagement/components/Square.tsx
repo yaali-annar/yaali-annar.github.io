@@ -1,12 +1,14 @@
 import React, { FC, useEffect, useRef } from 'react'
-import { SharedProps, canvasProps } from '../data'
-import { renderSquare, renderSvSlider } from '../engine'
+import { useColors } from '../context'
+import { canvasProps } from '../data'
+import { renderSquare, renderSvPointer } from '../engine'
 
-const Square: FC<SharedProps> = ({ hsv }: SharedProps) => {
+const Square: FC = () => {
   const squareRef = useRef<HTMLCanvasElement>(null)
-  const svSliderRef = useRef<HTMLCanvasElement>(null)
+  const svPointerRef = useRef<HTMLCanvasElement>(null)
+  const { selectedColor } = useColors()
 
-  const [h, s, v] = hsv
+  const { h, s, v } = selectedColor
 
   useEffect(() => {
     const square = squareRef.current.getContext('2d')
@@ -14,14 +16,14 @@ const Square: FC<SharedProps> = ({ hsv }: SharedProps) => {
   }, [h])
 
   useEffect(() => {
-    const svSlider = svSliderRef.current.getContext('2d')
-    renderSvSlider(svSlider, s, v)
+    const svPointer = svPointerRef.current.getContext('2d')
+    renderSvPointer(svPointer, s, v)
   }, [s, v])
 
   return (
     <>
       <canvas ref={squareRef} {...canvasProps}></canvas>
-      <canvas ref={svSliderRef} {...canvasProps}></canvas>
+      <canvas ref={svPointerRef} {...canvasProps}></canvas>
     </>
   )
 }

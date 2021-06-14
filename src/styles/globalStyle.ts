@@ -1,4 +1,4 @@
-import { css } from '@emotion/css'
+import { cx, css } from '@emotion/css'
 
 const spaceSizes = [1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64]
 
@@ -48,16 +48,22 @@ const spaces = spaceSizes.reduce<Record<string, unknown>>(
   {},
 )
 
-const utilities = {
+const utilities = css({
   '.flex': {
     display: 'flex',
     alignItems: 'center',
+    '&.column': {
+      flexDirection: 'column',
+    },
     '&.items-': {
       '&start': {
         alignItems: 'flex-start',
       },
     },
     '&.justify-': {
+      '&center': {
+        justifyContent: 'center',
+      },
       '&between': {
         justifyContent: 'space-between',
       },
@@ -66,15 +72,21 @@ const utilities = {
       },
     },
   },
+  '.text-': {
+    '&center': {
+      textAlign: 'center',
+    },
+  },
   ...spaces,
-}
+})
 
-const globalStyle = css({
+const aesthetic = css({
   fontFamily: "'Roboto Mono', monospace",
   'p,h1,h2,h3,h4,h5': {
     margin: 0,
   },
-  ...utilities,
 })
+
+const globalStyle = cx(aesthetic, utilities)
 
 export default globalStyle

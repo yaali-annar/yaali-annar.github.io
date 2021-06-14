@@ -1,7 +1,7 @@
 import React, { FC, useRef, useState } from 'react'
+import { useColors } from '../context'
 import {
   CANVAS_DIMENSION,
-  SharedProps,
   SQUARE_INSET,
   WHEEL_INNER_RADIUS,
   WHEEL_OUTER_RADIUS,
@@ -25,9 +25,10 @@ const cursorIsInWheel = (coordinate: number[]) => {
 
 const squareSize = CANVAS_DIMENSION - SQUARE_INSET * 2
 
-const CursorHandler: FC<SharedProps> = ({ hsv, setHsv }: SharedProps) => {
+const CursorHandler: FC = () => {
   const [mouseIsDown, setMouseIsDown] = useState(false)
   const cursorRef = useRef<HTMLDivElement>(null)
+  const { selectedColor, setColor } = useColors()
 
   const handleMouseMove = (event) => {
     if (!mouseIsDown) {
@@ -36,19 +37,21 @@ const CursorHandler: FC<SharedProps> = ({ hsv, setHsv }: SharedProps) => {
     const coordinate = getCursorPosition(cursorRef.current, event)
     const [x, y] = coordinate
     if (cursorIsInSquare(coordinate)) {
-      const s = ((x - SQUARE_INSET) / squareSize) * 360
-      const v = ((y - SQUARE_INSET) / squareSize) * 360
-      const newHsv = [...hsv]
-      newHsv[1] = Math.round(s)
-      newHsv[2] = Math.round(v)
-      setHsv(newHsv)
+      let s = ((x - SQUARE_INSET) / squareSize) * 360
+      let v = ((y - SQUARE_INSET) / squareSize) * 360
+      s = Math.round(s)
+      v = Math.round(v)
+
+      const newColor = { ...selectedColor, s, v }
+      setColor(newColor)
     }
 
     if (cursorIsInWheel(coordinate)) {
-      const newHsv = [...hsv]
-      const h = getAngle(coordinate)
-      newHsv[0] = Math.round(h)
-      setHsv(newHsv)
+      let h = getAngle(coordinate)
+      h = Math.round(h)
+
+      const newColor = { ...selectedColor, h }
+      setColor(newColor)
     }
   }
 

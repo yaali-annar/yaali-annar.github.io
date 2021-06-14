@@ -13,10 +13,29 @@ const rybStyle = css({
     height: CANVAS_DIMENSION,
     inset: 0,
   },
-  '.color-box': {
-    display: 'inline',
-    width: 30,
-    height: 30,
+
+  table: {
+    borderCollapse: 'collapse',
+    td: {
+      padding: 8,
+      input: {
+        width: 80,
+      },
+      '.color-box': {
+        width: 32,
+        height: 32,
+        border: '2px solid black',
+      },
+    },
+    '.selected': {
+      td: {
+        color: 'white',
+        backgroundColor: 'black',
+        '.color-box': {
+          border: '2px solid white',
+        },
+      },
+    },
   },
 })
 
